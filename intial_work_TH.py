@@ -21,7 +21,32 @@ ab=urllib2.urlopen('http://inds_ds_browse.uk1.prod.skyscanner.local/dataservices
 
 data=ab.split("\n")
 
-date='2016-07-26'
-lines=.readlines()
+#using json to make the data eaier to view and it also segments it really well
 
-x=lines[33]
+import json
+
+data2=json.loads(ab)
+
+#attempting to match up with quotes part of the list, found that I could did deeper and jsut look at price, see next chunk
+g=pd.Series(data2)
+gg=data2['Quotes']
+x=range(1,63)
+for a in x:
+    if  destination in gg[a]:
+       print(gg[a])
+
+#price data is hidden many level down in a list so I am trying to dig down to get it out, slowly getting there
+ 
+Quotes=data2['Quotes']
+
+d={}
+for a in x:
+    d['{0}'.format(x)]=Quotes[a] #attempting to get every price for the 63 flight options, not working yet
+    
+
+singlequote=Quotes[27]
+QuotesPrice=singlequote['Price']
+
+print (QuotesPrice)
+
+      
