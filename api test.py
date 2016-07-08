@@ -14,7 +14,9 @@ api_result = json.loads(f)
     
 print 'Enter your destination: '
 destination=raw_input()
-print 'How much spend?'
+destination=destination[:].upper()
+destination=destination[0:3]
+print 'How much do you want to spend?'
 destination_budget = raw_input("Budget: ")
 
 while not destination_budget.isdigit(): #ensures user enters a numnber and not text
@@ -24,13 +26,18 @@ while not destination_budget.isdigit(): #ensures user enters a numnber and not t
 
 datalist=[]
 for quote in api_result['Quotes'] :
-	if quote['Price'] <= int(destination_budget) and destination == str(quote['Inbound_ToStationId']):
+    if quote['Price'] <= int(destination_budget) and destination == str(quote['Inbound_ToStationId']):
          datalist.append(quote['Inbound_FromStationId'] + " - " + quote['Inbound_ToStationId'] + " -- " + 'Price: ' + str(quote['Price']) + " " + quote['CurrencyId'])
+   
+if not  destination == str((quote['Inbound_ToStationId'])):
+    print('invalid destination')
+    quit()
 print('cheapest')
 print min(datalist)
 
 if quote['Direct'] is True:
     print('Direct')
+    print(quote['Outbound_QuoteDateTime'])
 else:
     print('indirect')
     print('Okay, y or n?')
@@ -45,8 +52,10 @@ else:
 #output.write(json.dumps(edin_to_paris['Calendar'])
 
 ##############################################
-# since last time, i have added a destiantion question 
+# since last time, i have added a destination question 
 # it also tells you if the flight is direct(all in this set are i think)
 #working on getting the code to go back to the start if it is indirect 
 #and people don't want that, just to see how to do i
-
+####################
+#now if you input an invalid destination the script ends
+#also capatilises input and condenses so edi,edinburgh EDINBURGH work
